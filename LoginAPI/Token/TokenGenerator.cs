@@ -12,14 +12,14 @@ namespace LoginAPI.Token
     public class TokenGenerator
     {
         public static byte[] KEY ="RamdonKeyHereNotSecureNotHereVeryBad"u8.ToArray();
-        public string GenerateToken(LoginRegisterData data){
+        public string GenerateToken(string name, string email){
             var tokenHandler = new JwtSecurityTokenHandler();
 
 
             var claims = new List<Claim>(){
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new(JwtRegisteredClaimNames.Sub, data.Name),
-                new(JwtRegisteredClaimNames.Email, data.Email)
+                new(JwtRegisteredClaimNames.Sub, name),
+                new(JwtRegisteredClaimNames.Email, email)
             };
 
 

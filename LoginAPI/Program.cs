@@ -1,7 +1,11 @@
 using LoginAPI.Data;
 using LoginAPI.Service;
+using LoginAPI.Token;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,9 +16,33 @@ builder.Services.AddDbContext<LoginContext>(opt =>
     opt.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")!)
 );
 
+
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(x =>
+    {
+        x.TokenValidationParameters = new TokenValidationParameters
+        {
+            IssuerSigningKey = new SymmetricSecurityKey(TokenGenerator.KEY),
+
+            ValidIssuer = "http://localhost:5222/",
+            ValidAudience = "http://localhost:5222/",
+            ValidateIssuerSigningKey = true,
+            ValidateLifetime = true,
+            ValidateIssuer = true,
+            ValidateAudience = true,
+        };
+    });
+
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddSingleton<TokenGenerator>();
+
+
 
 var app = builder.Build();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -45,18 +73,38 @@ app.MapGet("/weatherforecast", () =>
         .ToArray();
     return forecast;
 })
+.RequireAuthorization()
 .WithName("GetWeatherForecast");
 
-app.MapGet("/login", async (ILoginService service, string username, string password) => {
+app.MapPost("/login", async (ILoginService service, string email, string password) =>
+{
 
-    return Results.Ok();
+
+    try
+    {
+        var r = await service.Login(email, password);
+        return Results.Ok(r);
+    }
+    catch (Exception ex)
+    {
+        return Results.BadRequest(new { Mensaje = ex.Message });
+    }
 
 })
 .WithName("Login Endpoint");
 
-app.MapPost("/register", async (ILoginService service, [FromBody]LoginRegisterData loginData ) => {
+app.MapPost("/register", async (ILoginService service, [FromBody] LoginRegisterData loginData) =>
+{
 
-    return Results.Ok();
+    try
+    {
+        var r = await service.Register(loginData);
+        return Results.Ok(r);
+    }
+    catch (Exception ex)
+    {
+        return Results.BadRequest(new { Mensaje = ex.Message });
+    }
 })
 .WithName("Register Endpoint");
 

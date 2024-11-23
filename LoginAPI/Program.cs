@@ -16,6 +16,9 @@ builder.Services.AddDbContext<LoginContext>(opt =>
     opt.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")!)
 );
 
+builder.Services.Configure<LoginOptions>(
+    builder.Configuration.GetSection(LoginOptions.OptionRoute));
+
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -76,13 +79,13 @@ app.MapGet("/weatherforecast", () =>
 .RequireAuthorization()
 .WithName("GetWeatherForecast");
 
-app.MapPost("/login", async (ILoginService service, string email, string password) =>
+app.MapPost("/login", async (ILoginService service, [FromBody]Credentials cred) =>
 {
 
 
     try
     {
-        var r = await service.Login(email, password);
+        var r = await service.Login(cred.email, cred.password);
         return Results.Ok(r);
     }
     catch (Exception ex)
@@ -114,3 +117,5 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
+
+record Credentials(string email, string password)  ;

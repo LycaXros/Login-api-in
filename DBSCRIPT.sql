@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `bhd`.`users` (
   `creado` DATETIME NOT NULL,
   `modificado` DATETIME NOT NULL,
   `ultimo` DATETIME NOT NULL,
-  `token` VARCHAR(200) CHARACTER SET 'utf8mb3' NOT NULL,
+  `token` VARCHAR(500) CHARACTER SET 'utf8mb3' NOT NULL,
   `activo` TINYINT(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,

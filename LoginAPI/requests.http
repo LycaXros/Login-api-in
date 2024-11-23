@@ -1,0 +1,38 @@
+
+###Con token
+
+GET http://localhost:5222/weatherforecast HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5Y2JiMDE0Ny0zYmQ3LTRkOWMtYjE5MC02MzFhZjM2MDlmZjgiLCJzdWIiOiJ0ZXN0IiwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwibmJmIjoxNzMyMzg2NjE4LCJleHAiOjMzMjg5Mjk1NDE4LCJpYXQiOjE3MzIzODY2MTgsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTIyMi8iLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjUyMjIvIn0.LgLzd7cPOCamnyz49rV64QHV-7W1C2FLPkmx21SE04k
+
+### SIn token
+GET http://localhost:5222/weatherforecast HTTP/1.1
+content-type: application/json
+
+###
+
+POST http://localhost:5222/login HTTP/1.1
+content-type: application/json
+
+{
+    "email": "test@test.com",
+    "password": "strinG1234"
+}
+
+###
+
+POST http://localhost:5222/register HTTP/1.1
+content-type: application/json
+
+{
+  "name": "test",
+  "password": "strinG1234",
+  "email": "test@test.com",
+  "phones": [
+    {
+      "number": "8256",
+      "cityCode": "829",
+      "countryCode": "1"
+    }
+  ]
+}

@@ -19,6 +19,11 @@ namespace LoginAPI.Service
             generator = tokenGenerator;
             loginOptions = options.Value;
         }
+
+        public LoginService()
+        {
+        }
+
         public async Task<LoginResult> Login(string email, string password)
         {
 
@@ -52,7 +57,7 @@ namespace LoginAPI.Service
                Psswd = data.Password,
                Activo = true 
             };
-            var token = generator.GenerateToken(data);
+            var token = generator.GenerateToken(data.Name,data.Email);
             u.Token = token;
             u.Modificado = u.Creado;
             u.Ultimo= u.Creado;

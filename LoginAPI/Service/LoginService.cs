@@ -19,11 +19,6 @@ namespace LoginAPI.Service
             generator = tokenGenerator;
             loginOptions = options.Value;
         }
-
-        public LoginService()
-        {
-        }
-
         public async Task<LoginResult> Login(string email, string password)
         {
 
@@ -36,7 +31,8 @@ namespace LoginAPI.Service
                 throw new Exception("Contraseña Incorrecta");
 
             var phones = await _context.Phones.Where(x => x.UserId == user.Id).ToListAsync();
-
+            user.Ultimo = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
             return GenUser(user, phones);
         }
 

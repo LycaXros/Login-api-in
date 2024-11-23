@@ -11,7 +11,7 @@ namespace LoginAPI.Token
 {
     public class TokenGenerator
     {
-        public static byte[] KEY ="RamdonKeyHereNotSecure12345*"u8.ToArray();
+        public static byte[] KEY ="RamdonKeyHereNotSecureNotHereVeryBad"u8.ToArray();
         public string GenerateToken(LoginRegisterData data){
             var tokenHandler = new JwtSecurityTokenHandler();
 
